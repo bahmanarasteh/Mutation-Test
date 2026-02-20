@@ -4,9 +4,8 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>edu.example</groupId>
-  <artifactId>triangle-pitest</artifactId>
+  <artifactId>cal-pitest</artifactId>
   <version>1.0-SNAPSHOT</version>
-  <name>triangle-pitest</name>
 
   <properties>
     <maven.compiler.source>17</maven.compiler.source>
@@ -18,7 +17,6 @@
   </properties>
 
   <dependencies>
-    <!-- JUnit 5 -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
@@ -30,7 +28,6 @@
   <build>
     <plugins>
 
-      <!-- Run JUnit 5 tests -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
@@ -40,13 +37,11 @@
         </configuration>
       </plugin>
 
-      <!-- PIT Mutation Testing -->
       <plugin>
         <groupId>org.pitest</groupId>
         <artifactId>pitest-maven</artifactId>
         <version>${pitest.version}</version>
 
-        <!-- IMPORTANT: PIT support for JUnit 5 -->
         <dependencies>
           <dependency>
             <groupId>org.pitest</groupId>
@@ -56,13 +51,12 @@
         </dependencies>
 
         <configuration>
-          <!-- Your class is in default package -->
           <targetClasses>
-            <param>Triangle</param>
+            <param>cal.*</param>
           </targetClasses>
 
           <targetTests>
-            <param>*Test</param>
+            <param>cal.*Test</param>
           </targetTests>
 
           <outputFormats>
@@ -70,7 +64,6 @@
             <param>XML</param>
           </outputFormats>
 
-          <!-- Optional but useful -->
           <timestampedReports>false</timestampedReports>
         </configuration>
       </plugin>
