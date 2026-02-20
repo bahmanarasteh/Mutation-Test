@@ -52,19 +52,19 @@
 
         <configuration>
          <targetClasses>
-          <param>remainder.*</param>
+           <param>isvalidate.*</param>
          </targetClasses>
 
          <targetTests>
-           <param>*Test</param>
+           <param>isvalidate.*Test</param>
          </targetTests>
           
-          <outputFormats>
-            <param>HTML</param>
-            <param>XML</param>
-          </outputFormats>
+         <outputFormats>
+           <param>HTML</param>
+           <param>XML</param>
+         </outputFormats>
 
-          <timestampedReports>false</timestampedReports>
+         <timestampedReports>false</timestampedReports>
         </configuration>
       </plugin>
 
