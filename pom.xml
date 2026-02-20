@@ -1,44 +1,80 @@
-<build>
-  <plugins>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
-    <!-- JUnit 5 runner -->
-    <plugin>
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-surefire-plugin</artifactId>
-      <version>3.2.5</version>
-      <configuration>
-        <useModulePath>false</useModulePath>
-      </configuration>
-    </plugin>
+  <groupId>edu.example</groupId>
+  <artifactId>triangle-pitest</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <name>triangle-pitest</name>
 
-    <!-- PIT Mutation Testing -->
-    <plugin>
-      <groupId>org.pitest</groupId>
-      <artifactId>pitest-maven</artifactId>
-      <version>1.15.2</version>
+  <properties>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <junit.jupiter.version>5.10.2</junit.jupiter.version>
+    <pitest.version>1.15.2</pitest.version>
+    <pitest.junit5.plugin.version>1.2.1</pitest.junit5.plugin.version>
+  </properties>
 
-      <!-- ✅ IMPORTANT: add PIT JUnit 5 plugin dependency -->
-      <dependencies>
-        <dependency>
-          <groupId>org.pitest</groupId>
-          <artifactId>pitest-junit5-plugin</artifactId>
-          <version>1.2.1</version>
-        </dependency>
-      </dependencies>
+  <dependencies>
+    <!-- JUnit 5 -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>${junit.jupiter.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 
-      <configuration>
-        <targetClasses>
-          <param>Triangle</param>
-        </targetClasses>
-        <targetTests>
-          <param>*Test</param>
-        </targetTests>
-        <outputFormats>
-          <param>HTML</param>
-          <param>XML</param>
-        </outputFormats>
-      </configuration>
-    </plugin>
+  <build>
+    <plugins>
 
-  </plugins>
-</build>
+      <!-- Run JUnit 5 tests -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.2.5</version>
+        <configuration>
+          <useModulePath>false</useModulePath>
+        </configuration>
+      </plugin>
+
+      <!-- PIT Mutation Testing -->
+      <plugin>
+        <groupId>org.pitest</groupId>
+        <artifactId>pitest-maven</artifactId>
+        <version>${pitest.version}</version>
+
+        <!-- IMPORTANT: PIT support for JUnit 5 -->
+        <dependencies>
+          <dependency>
+            <groupId>org.pitest</groupId>
+            <artifactId>pitest-junit5-plugin</artifactId>
+            <version>${pitest.junit5.plugin.version}</version>
+          </dependency>
+        </dependencies>
+
+        <configuration>
+          <!-- Your class is in default package -->
+          <targetClasses>
+            <param>Triangle</param>
+          </targetClasses>
+
+          <targetTests>
+            <param>*Test</param>
+          </targetTests>
+
+          <outputFormats>
+            <param>HTML</param>
+            <param>XML</param>
+          </outputFormats>
+
+          <!-- Optional but useful -->
+          <timestampedReports>false</timestampedReports>
+        </configuration>
+      </plugin>
+
+    </plugins>
+  </build>
+</project>
