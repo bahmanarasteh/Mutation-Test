@@ -1,25 +1,87 @@
-package remainder;
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+         https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-public class Remainder {
+    <modelVersion>4.0.0</modelVersion>
 
-    // Computes the integer remainder of dividend / divisor
-    public static int compute(int dividend, int divisor) {
+    <groupId>edu.benchmark</groupId>
+    <artifactId>remainder-pitest</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>Remainder Benchmark - PIT</name>
 
-        if (divisor == 0) {
-            throw new ArithmeticException("Division by zero");
-        }
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        // Normalize sign to keep remainder non-negative (benchmark-friendly)
-        int a = Math.abs(dividend);
-        int b = Math.abs(divisor);
+        <junit.jupiter.version>5.10.2</junit.jupiter.version>
+        <pitest.version>1.15.2</pitest.version>
+        <pitest.junit5.plugin.version>1.2.1</pitest.junit5.plugin.version>
+    </properties>
 
-        int r = a % b;
+    <dependencies>
 
-        // Restore sign rule similar to Java: remainder follows dividend sign
-        if (dividend < 0) {
-            r = -r;
-        }
+        <!-- JUnit 5 -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
 
-        return r;
-    }
-}
+    </dependencies>
+
+    <build>
+        <plugins>
+
+            <!-- Ensure JUnit 5 runs correctly -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+                <configuration>
+                    <useModulePath>false</useModulePath>
+                </configuration>
+            </plugin>
+
+            <!-- PIT Mutation Testing -->
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <version>${pitest.version}</version>
+
+                <!-- JUnit 5 support for PIT -->
+                <dependencies>
+                    <dependency>
+                        <groupId>org.pitest</groupId>
+                        <artifactId>pitest-junit5-plugin</artifactId>
+                        <version>${pitest.junit5.plugin.version}</version>
+                    </dependency>
+                </dependencies>
+
+                <configuration>
+
+                    <!-- Target only remainder package -->
+                    <targetClasses>
+                        <param>remainder.*</param>
+                    </targetClasses>
+
+                    <targetTests>
+                        <param>remainder.*Test</param>
+                    </targetTests>
+
+                    <outputFormats>
+                        <param>HTML</param>
+                        <param>XML</param>
+                    </outputFormats>
+
+                    <timestampedReports>false</timestampedReports>
+
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>
