@@ -52,11 +52,11 @@
 
         <configuration>
          <targetClasses>
-           <param>day.*</param>
+          <param>remainder.*</param>
          </targetClasses>
 
          <targetTests>
-           <param>day.*Test</param>
+           <param>*Test</param>
          </targetTests>
           
           <outputFormats>
