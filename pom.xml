@@ -52,11 +52,11 @@
 
         <configuration>
          <targetClasses>
-           <param>isvalidate.*</param>
+           <param>remainder.*</param>
          </targetClasses>
 
          <targetTests>
-           <param>isvalidate.*Test</param>
+           <param>remainder.*Test</param>
          </targetTests>
           
          <outputFormats>
