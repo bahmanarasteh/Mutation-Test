@@ -60,20 +60,14 @@
         </dependencies>
 
         <configuration>
-          <!-- IMPORTANT: JUnit 5 support -->
           <testPlugin>junit5</testPlugin>
 
-          <!-- Your main classes (src/main/java/remainder/...) -->
           <targetClasses>
             <param>remainder.*</param>
           </targetClasses>
 
-          <!-- Your tests (src/test/java/remainder/...) -->
           <targetTests>
             <param>remainder.*Test</param>
-            <!-- If you want only one test class, use:
-            <param>remainder.RemainderTest</param>
-            -->
           </targetTests>
 
           <outputFormats>
