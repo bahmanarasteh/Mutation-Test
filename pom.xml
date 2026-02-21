@@ -62,12 +62,14 @@
         <configuration>
           <testPlugin>junit5</testPlugin>
 
+          <!-- MUTATE DateValidator -->
           <targetClasses>
-            <param>remainder.*</param>
+            <param>isvalidate.*</param>
           </targetClasses>
 
+          <!-- RUN DateValidator tests -->
           <targetTests>
-            <param>remainder.*Test</param>
+            <param>isvalidate.*Test</param>
           </targetTests>
 
           <outputFormats>
