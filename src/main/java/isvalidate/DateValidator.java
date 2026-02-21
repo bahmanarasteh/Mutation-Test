@@ -1,105 +1,81 @@
 package isvalidate;
 
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 /**
- * Stronger test suite:
- * - covers typical valid dates
- * - invalid months/days
- * - month length differences
- * - leap year logic (incl. century rules)
- * - boundary values
- *
- * This should produce a much better mutation score.
+ * Simple Date Validator for mutation testing benchmarks.
+ * Validates dates in Gregorian calendar.
  */
-class DateValidatorGoodTest {
+public class DateValidator {
 
-    @Test
-    void validTypicalDates() {
-        assertTrue(DateValidator.isValid(15, 1, 2024)); // Jan 15
-        assertTrue(DateValidator.isValid(30, 4, 2024)); // Apr 30
-        assertTrue(DateValidator.isValid(31, 7, 2024)); // Jul 31
+    /**
+     * Validates a date.
+     *
+     * @param day   day of month
+     * @param month month (1-12)
+     * @param year  year (>= 1)
+     * @return true if valid date, false otherwise
+     */
+    public static boolean isValid(int day, int month, int year) {
+
+        // Basic year validation
+        if (year < 1) {
+            return false;
+        }
+
+        // Month must be between 1 and 12
+        if (month < 1 || month > 12) {
+            return false;
+        }
+
+        // Day must be positive
+        if (day < 1) {
+            return false;
+        }
+
+        int maxDays;
+
+        switch (month) {
+            case 1: case 3: case 5: case 7:
+            case 8: case 10: case 12:
+                maxDays = 31;
+                break;
+
+            case 4: case 6: case 9: case 11:
+                maxDays = 30;
+                break;
+
+            case 2:
+                if (isLeapYear(year)) {
+                    maxDays = 29;
+                } else {
+                    maxDays = 28;
+                }
+                break;
+
+            default:
+                return false; // defensive (should never reach)
+        }
+
+        return day <= maxDays;
     }
 
-    @Test
-    void invalidMonthValues() {
-        assertFalse(DateValidator.isValid(1, 0, 2024));
-        assertFalse(DateValidator.isValid(1, 13, 2024));
-        assertFalse(DateValidator.isValid(1, -1, 2024));
-    }
+    /**
+     * Determines whether a year is a leap year.
+     *
+     * Leap year rule:
+     * - divisible by 4
+     * - but not divisible by 100
+     * - unless divisible by 400
+     */
+    private static boolean isLeapYear(int year) {
 
-    @Test
-    void invalidDayValues() {
-        assertFalse(DateValidator.isValid(0, 1, 2024));
-        assertFalse(DateValidator.isValid(-5, 1, 2024));
-        assertFalse(DateValidator.isValid(32, 1, 2024)); // Jan has max 31
-    }
+        if (year % 400 == 0) {
+            return true;
+        }
 
-    @Test
-    void monthWith30Days() {
-        // April, June, September, November have 30 days
-        assertTrue(DateValidator.isValid(30, 4, 2024));
-        assertFalse(DateValidator.isValid(31, 4, 2024));
+        if (year % 100 == 0) {
+            return false;
+        }
 
-        assertTrue(DateValidator.isValid(30, 6, 2024));
-        assertFalse(DateValidator.isValid(31, 6, 2024));
-
-        assertTrue(DateValidator.isValid(30, 9, 2024));
-        assertFalse(DateValidator.isValid(31, 9, 2024));
-
-        assertTrue(DateValidator.isValid(30, 11, 2024));
-        assertFalse(DateValidator.isValid(31, 11, 2024));
-    }
-
-    @Test
-    void monthWith31Days() {
-        // Jan, Mar, May, Jul, Aug, Oct, Dec have 31 days
-        assertTrue(DateValidator.isValid(31, 1, 2024));
-        assertTrue(DateValidator.isValid(31, 3, 2024));
-        assertTrue(DateValidator.isValid(31, 5, 2024));
-        assertTrue(DateValidator.isValid(31, 7, 2024));
-        assertTrue(DateValidator.isValid(31, 8, 2024));
-        assertTrue(DateValidator.isValid(31, 10, 2024));
-        assertTrue(DateValidator.isValid(31, 12, 2024));
-
-        // Day 32 should be invalid everywhere
-        assertFalse(DateValidator.isValid(32, 12, 2024));
-    }
-
-    @Test
-    void februaryNonLeapYear() {
-        assertTrue(DateValidator.isValid(28, 2, 2023));
-        assertFalse(DateValidator.isValid(29, 2, 2023));
-        assertFalse(DateValidator.isValid(30, 2, 2023));
-    }
-
-    @Test
-    void februaryLeapYearTypical() {
-        // 2024 is a leap year
-        assertTrue(DateValidator.isValid(29, 2, 2024));
-        assertFalse(DateValidator.isValid(30, 2, 2024));
-    }
-
-    @Test
-    void leapYearCenturyRules() {
-        // 1900 is NOT a leap year (divisible by 100 but not by 400)
-        assertFalse(DateValidator.isValid(29, 2, 1900));
-        assertTrue(DateValidator.isValid(28, 2, 1900));
-
-        // 2000 IS a leap year (divisible by 400)
-        assertTrue(DateValidator.isValid(29, 2, 2000));
-        assertFalse(DateValidator.isValid(30, 2, 2000));
-    }
-
-    @Test
-    void boundaries() {
-        // Common boundaries that often hide off-by-one mutants
-        assertTrue(DateValidator.isValid(1, 1, 1970));
-        assertTrue(DateValidator.isValid(31, 12, 2024));
-
-        assertFalse(DateValidator.isValid(31, 9, 2024));  // Sep has 30
-        assertFalse(DateValidator.isValid(29, 2, 2100));  // 2100 is not leap (century not /400)
+        return year % 4 == 0;
     }
 }
