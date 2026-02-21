@@ -60,7 +60,7 @@
         </dependencies>
 
         <configuration>
-          <!-- JUnit 5 -->
+          <!-- IMPORTANT: JUnit 5 support -->
           <testPlugin>junit5</testPlugin>
 
           <!-- Your main classes (src/main/java/remainder/...) -->
@@ -71,6 +71,9 @@
           <!-- Your tests (src/test/java/remainder/...) -->
           <targetTests>
             <param>remainder.*Test</param>
+            <!-- If you want only one test class, use:
+            <param>remainder.RemainderTest</param>
+            -->
           </targetTests>
 
           <outputFormats>
@@ -79,8 +82,6 @@
           </outputFormats>
 
           <timestampedReports>false</timestampedReports>
-
-          <!-- optional (helps avoid failing when no mutants are found) -->
           <failWhenNoMutations>false</failWhenNoMutations>
         </configuration>
       </plugin>
