@@ -17,7 +17,6 @@
   </properties>
 
   <dependencies>
-    <!-- JUnit 5 (API + engine) -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
@@ -29,7 +28,6 @@
   <build>
     <plugins>
 
-      <!-- Compile with Java 17 -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -39,7 +37,6 @@
         </configuration>
       </plugin>
 
-      <!-- Run JUnit 5 tests -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
@@ -49,7 +46,6 @@
         </configuration>
       </plugin>
 
-      <!-- PIT Mutation Testing -->
       <plugin>
         <groupId>org.pitest</groupId>
         <artifactId>pitest-maven</artifactId>
@@ -64,15 +60,20 @@
         </dependencies>
 
         <configuration>
-          <!-- IMPORTANT for JUnit 5 -->
+          <!-- IMPORTANT: JUnit 5 support -->
           <testPlugin>junit5</testPlugin>
 
+          <!-- Your main classes -->
           <targetClasses>
             <param>remainder.*</param>
           </targetClasses>
 
+          <!-- Your tests -->
           <targetTests>
-            <param>remainder.*Test*</param>
+            <param>remainder.RemainderTest</param>
+            <!-- or use this instead if you add more tests later:
+            <param>remainder.*Test</param>
+            -->
           </targetTests>
 
           <outputFormats>
@@ -81,9 +82,6 @@
           </outputFormats>
 
           <timestampedReports>false</timestampedReports>
-
-          <!-- Optional but helpful: don't fail build if PIT finds 0 mutants -->
-          <failWhenNoMutations>false</failWhenNoMutations>
         </configuration>
       </plugin>
 
